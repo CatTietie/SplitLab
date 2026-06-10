@@ -54,6 +54,8 @@ async def build_sdk_config(db: AsyncSession) -> SDKConfigResponse:
                     for g, pct in effective
                 ],
                 whitelist=whitelist_map,
+                targeting_rules=exp.targeting_rules,
+                stratification_dimensions=exp.stratification_dimensions,
             ))
 
         layer_configs.append(LayerConfig(

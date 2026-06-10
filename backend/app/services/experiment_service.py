@@ -21,6 +21,8 @@ async def create_experiment(db: AsyncSession, data: ExperimentCreate) -> Experim
         created_by=data.created_by,
         rollout_steps=[s.model_dump() for s in data.rollout_steps] if data.rollout_steps else None,
         guardrail_metrics=[m.model_dump() for m in data.guardrail_metrics] if data.guardrail_metrics else None,
+        targeting_rules=data.targeting_rules,
+        stratification_dimensions=data.stratification_dimensions,
     )
     db.add(experiment)
     await db.flush()

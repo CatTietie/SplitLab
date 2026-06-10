@@ -27,6 +27,8 @@ class Experiment(Base):
     rollout_steps: Mapped[list | None] = mapped_column(JSONB, nullable=True)
     current_step_index: Mapped[int | None] = mapped_column(Integer, nullable=True)
     guardrail_metrics: Mapped[list | None] = mapped_column(JSONB, nullable=True)
+    targeting_rules: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    stratification_dimensions: Mapped[list | None] = mapped_column(JSONB, nullable=True)
     created_by: Mapped[str | None] = mapped_column(String(128))
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=utcnow, onupdate=utcnow)

@@ -18,6 +18,8 @@ class ExperimentConfig:
     bucket_end: int
     groups: list[GroupConfig] = field(default_factory=list)
     whitelist: dict[str, str] = field(default_factory=dict)
+    targeting_rules: dict | None = None
+    stratification_dimensions: list[str] | None = None
 
 
 @dataclass
@@ -48,6 +50,8 @@ class SDKConfig:
                     bucket_end=ed["bucket_end"],
                     groups=groups,
                     whitelist=ed.get("whitelist", {}),
+                    targeting_rules=ed.get("targeting_rules"),
+                    stratification_dimensions=ed.get("stratification_dimensions"),
                 ))
             layers.append(LayerConfig(
                 id=ld["id"],

@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, Request, Response
+from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 import redis.asyncio as redis
 
 from app.core.database import get_db
 from app.core.redis import get_redis
 from app.schemas.event import EventBatch
+from app.schemas.targeting import AttributeBatchRequest
 from app.services.config_service import get_cached_config
 from app.services.event_service import ingest_events
+from app.services.attribute_service import upsert_attributes, AttributeValidationError
 
 router = APIRouter(prefix="/api/v1/sdk", tags=["sdk"])
 
@@ -34,3 +37,19 @@ async def get_sdk_config(
 async def post_events(batch: EventBatch, db: AsyncSession = Depends(get_db)):
     count = await ingest_events(db, batch)
     return {"accepted": count}
+
+
+@router.post("/attributes")
+async def upload_attributes(
+    request: AttributeBatchRequest,
+    db: AsyncSession = Depends(get_db),
+    redis_client: redis.Redis = Depends(get_redis),
+):
+    total = 0
+    for user_upload in request.users:
+        try:
+            await upsert_attributes(db, redis_client, user_upload.user_id, user_upload.attributes)
+            total += len(user_upload.attributes)
+        except AttributeValidationError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    return {"accepted": total}

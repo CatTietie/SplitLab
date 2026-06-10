@@ -55,6 +55,8 @@ class ExperimentCreate(BaseModel):
     created_by: str | None = None
     rollout_steps: list[RolloutStep] | None = None
     guardrail_metrics: list[GuardrailMetric] | None = None
+    targeting_rules: dict | None = None
+    stratification_dimensions: list[str] | None = Field(default=None, max_length=5)
 
 
 class ExperimentUpdate(BaseModel):
@@ -64,6 +66,8 @@ class ExperimentUpdate(BaseModel):
     bucket_end: int | None = Field(default=None, ge=0, le=9999)
     rollout_steps: list[RolloutStep] | None = None
     guardrail_metrics: list[GuardrailMetric] | None = None
+    targeting_rules: dict | None = None
+    stratification_dimensions: list[str] | None = None
 
 
 class ExperimentResponse(BaseModel):
@@ -79,6 +83,8 @@ class ExperimentResponse(BaseModel):
     rollout_steps: list[RolloutStep] | None = None
     current_step_index: int | None = None
     guardrail_metrics: list[GuardrailMetric] | None = None
+    targeting_rules: dict | None = None
+    stratification_dimensions: list[str] | None = None
     created_by: str | None
     created_at: datetime
     updated_at: datetime

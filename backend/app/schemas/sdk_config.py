@@ -17,6 +17,8 @@ class ExperimentConfig(BaseModel):
     bucket_end: int
     groups: list[GroupConfig]
     whitelist: dict[str, str] = {}  # user_id -> group_name
+    targeting_rules: dict | None = None
+    stratification_dimensions: list[str] | None = None
 
 
 class LayerConfig(BaseModel):
